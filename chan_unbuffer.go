@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"time"
 )
 
@@ -17,6 +18,7 @@ func main() {
 	}
 
 	fmt.Println(<-ch)
+	fmt.Println("os.TempDir() = ", os.TempDir())
+	time.Sleep(2 * time.Second)
 
-	time.Sleep(10 * time.Second)
 }
