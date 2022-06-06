@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 )
-
+// 有 bug  稍后需要调试
 var mutex = sync.Mutex{}
 var closed = false
 
