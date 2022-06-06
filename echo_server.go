@@ -20,14 +20,19 @@ func main() {
 			fmt.Println("accept on network failed ", err)
 			os.Exit(100)
 		}
-
-		buf := make([]byte, 1024)
-		readLen, _ := conn.Read(buf)
-		// 邪恶的转码
-		content := string([]rune(string(buf[0:readLen])))
-		writeLen, _ := conn.Write(buf[0:readLen])
-		fmt.Println("read len:", readLen, "content :", content, "writeLen:", writeLen)
-		conn.Close()
+		go Service(conn)
 	}
 
+}
+
+func Service(conn net.Conn) {
+
+	defer conn.Close()
+
+	buf := make([]byte, 1024)
+	readLen, _ := conn.Read(buf)
+	// 邪恶的转码
+	content := string([]rune(string(buf[0:readLen])))
+	writeLen, _ := conn.Write(buf[0:readLen])
+	fmt.Println("read len:", readLen, "content :", content, "writeLen:", writeLen)
 }
