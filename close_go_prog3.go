@@ -8,8 +8,8 @@ import (
 // 死锁示范
 func main() {
 
-	done := make(chan struct{})
-	isCancel := cancel2(done)
+	done := make(chan struct{}, 1) // 一个缓冲的chan
+	isCancel := cancel3(done)
 	fmt.Println("isCancel = ", isCancel)
 
 	var wg sync.WaitGroup
@@ -18,7 +18,7 @@ func main() {
 	fmt.Println("wg1", wg) // wg1 与 wg2不一样
 	go func() {
 		fmt.Println("wg2", wg)
-		done <- struct{}{} // 此处阻塞
+		done <- struct{}{} // 注意：此处将不再阻塞
 		wg.Done()
 	}()
 
@@ -26,19 +26,18 @@ func main() {
 	fmt.Println("wg1", wg)
 	go func() {
 		wg.Wait() // 此处阻塞
-		isCancel = cancel2(done)
+		isCancel = cancel3(done)
 		fmt.Println("isCancel = ", isCancel)
 		exit <- struct{}{}
 	}()
 
-	<-exit  // 此处阻塞
+	<-exit // 此处阻塞
 
-	// 三处阻塞导致没有活跃的goroutine 最终死锁  那如何解决死锁呢？
-	// 解除一个goroutine的阻塞，参考close_go_prog3.go解决
+	//  将21行代码放行最终让所有goroutine执行完毕
 }
 
 // 是否取消
-func cancel2(ch chan struct{}) bool {
+func cancel3(ch chan struct{}) bool {
 	select {
 	case <-ch:
 		return true
