@@ -1,3 +1,3 @@
 # learn-go
 
-- learn go 学习联系代码
+- learn go 学习练习代码
