@@ -20,12 +20,11 @@ func main() {
 		abort <- struct{}{}
 	}()
 
-	// 类似于一个定时的chan
+	// 类似于一个定时的chan  适合使用场景是全局的时间调度
 	tickChan := time.Tick(1 * time.Second)
 	for count := 0; count < 5; count++ {
 		fmt.Println(count, " <-tickChan : ", <-tickChan)
 	}
-
 	now := time.Now()
 	after := time.After(2 * time.Second)
 
