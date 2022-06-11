@@ -17,7 +17,14 @@ import (
 
 4：由于Goroutine的调度是在用户态完成的，不需要操作系统内核干预  所以效率较高
 
+
+重点：
+Goroutines that are sleeping or blocked in a communication do not need a thread at all.
+Goroutines that are blocked in I/O or other system calls or are calling non-Go functions,
+do need an OS thread, but GOMAXPROCS need not account for them.
+
 */
+
 func main() {
 
 	start := time.Now().UnixNano()
