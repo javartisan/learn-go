@@ -1,8 +1,7 @@
 package main
 
-import "fmt"
+import "github.com/javartisan/fuck-dep"
 
 func main() {
-
-	fmt.Println("github.com/javartisan/go-utils/echo")
+	fuck.Fuck()
 }
