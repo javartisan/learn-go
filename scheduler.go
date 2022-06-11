@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"time"
+)
+
 /**
 1: 操作系统线程由硬件时钟终端发送到CPU然后调用内核的调度函数选择一个线程进行执行，
 	这个过程会保存当前线程的状态信息，然后将被执行的线程信息进行恢复（上下文切换）
@@ -14,5 +19,38 @@ package main
 
 */
 func main() {
+
+	start := time.Now().UnixNano()
+	end := start + time.Second.Nanoseconds()
+
+	count := 0
+
+	pc := &count
+
+	ch1 := make(chan int)
+	ch2 := make(chan int)
+
+	go func() {
+		for time.Now().UnixNano() <= end {
+			val := <-ch1
+			ch2 <- val
+			*pc++
+		}
+	}()
+
+	go func() {
+		for time.Now().UnixNano() <= end {
+			val := <-ch2
+			ch1 <- val
+		}
+	}()
+
+	ch1 <- 1
+
+	for time.Now().UnixNano() <= end {
+
+	}
+
+	fmt.Println("costime = ", end-start, "nano count =", *pc)
 
 }
